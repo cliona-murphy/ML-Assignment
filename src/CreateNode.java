@@ -2,20 +2,18 @@ import java.util.*;
 import java.util.Map.Entry;
 public class CreateNode {
 	
-	private int numColumns; //this var is not used so maybe not needed?
 	private int numRows;
 	private String[][] dataset = null;
 	private ArrayList<String> classes = new ArrayList<String>();
 	private double entropy;
 	int classIndex = 3;
 	
-	public CreateNode(int numColumns, int numRows, String[][] dataset) {
-		this.numColumns = numColumns;
+	public CreateNode(int numRows, String[][] dataset) {
 		this.numRows = numRows;
 		this.dataset = dataset;
 	}
 	
-	public TreeNode createNextNode(int colNum) { //creates next node based on calculations of entropy and gain of a specific attribute
+	public TreeNode createNextNode(int colNum) { 					//creates next node based on calculations of entropy and gain of a specific attribute
 		ArrayList<Double> thresholdArray = new ArrayList<Double>(); //arraylist to store all possible threshold values
 		String classType = "";
 		double threshValue;

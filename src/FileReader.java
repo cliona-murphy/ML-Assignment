@@ -15,7 +15,7 @@ public class FileReader {
 		{
 		//read in file
 		try {
-			File myObj = new File("C:\\Users\\Clíona's PC\\Documents\\Final Year\\Machine Learning\\MLData.txt");
+			File myObj = new File("C:\\Users\\Clíona's PC\\Downloads\\beert.txt");
 		    Scanner myReader = new Scanner(myObj);
 		    while (myReader.hasNextLine()) {
 		        String data = myReader.nextLine();
@@ -34,9 +34,8 @@ public class FileReader {
 		for(int i = 0; i<11; i++) {
 			String rowData = alldata[i];
 			String[] temp1 = rowData.split("\t");
-			String[] temp2 = new String[9];
-			System.arraycopy(temp1, 0, temp2, 0, 3);
-			System.arraycopy(temp1, 4, temp2, 3, 6);
+			String[] temp2 = new String[8];
+			System.arraycopy(temp1, 1, temp2, 0, 8);
 			dataset[i] = temp2;
 			numCols = temp2.length;
 		}
@@ -49,7 +48,7 @@ public class FileReader {
 			String[] temp1 = rowData.split("\t");
 			datasetWithClasses[i] = temp1;			
 		}
-		return dataset;
+		return datasetWithClasses;
 		
 	}
 	public int getNumCols() { //returns the number of columns in dataset 

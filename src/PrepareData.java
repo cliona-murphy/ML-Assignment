@@ -1,11 +1,10 @@
 import java.util.*;
 
 public class PrepareData {
-	private int numColumns, numRows;
+	private int numRows;
 	private String[][] dataset;
 	
-	public PrepareData(int numColumns, int numRows, String[][] dataset) {
-		this.numColumns = numColumns;
+	public PrepareData(int numRows, String[][] dataset) {
 		this.numRows = numRows;
 		this.dataset = dataset;
 	}
