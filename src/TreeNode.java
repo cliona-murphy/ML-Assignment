@@ -1,29 +1,19 @@
 
 public class TreeNode {
 	
-    private String nodeTitle;
     private TreeNode parent;
     private TreeNode rightChild;
     private TreeNode leftChild;
     private double threshold;
     private double infoGain;
 
-    public TreeNode(String classTitle, TreeNode parent, TreeNode rChild, TreeNode lChild, double thresh, double infoGain){
-        nodeTitle = classTitle;
+    public TreeNode(TreeNode parent, TreeNode rChild, TreeNode lChild, double thresh, double infoGain){
         this.parent = parent;
         rightChild = rChild;
         leftChild = lChild;
         threshold = thresh;
         this.infoGain = infoGain;
     }
-
-    public String getNodeTitle() {
-		return nodeTitle;
-	}
-
-	public void setNodeTitle(String classTitle) {
-		nodeTitle = classTitle;
-	}
 
 	public TreeNode getParent() {
 		return parent;
