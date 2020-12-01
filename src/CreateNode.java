@@ -1,15 +1,15 @@
 import java.util.*;
 import java.util.Map.Entry;
-public class InformationGain {
+public class CreateNode {
 	
-	private int numColumns;
+	private int numColumns; //this var is not used so maybe not needed?
 	private int numRows;
 	private String[][] dataset = null;
 	private ArrayList<String> classes = new ArrayList<String>();
-	private double totalEntropy;
+	private double entropy;
 	int classIndex = 3;
 	
-	public InformationGain(int numColumns, int numRows, String[][] dataset) {
+	public CreateNode(int numColumns, int numRows, String[][] dataset) {
 		this.numColumns = numColumns;
 		this.numRows = numRows;
 		this.dataset = dataset;
@@ -20,24 +20,26 @@ public class InformationGain {
 		String classType = "";
 		double threshValue;
 		double gain;
-		int i = 1;
+		int i = 0;
 		
-		while(i<numRows) {                                          //loop through dataset
+		while(i < numRows) {                                          //loop through dataset
 			classType = dataset[i][classIndex];						//for 1st row assign value of class to classType
+			
 			if(!classes.contains(classType)){                               //checking if that class is already in the classes ArrayList
                 classes.add(classType);                                  //if it's not, add it
             }
             threshValue = Double.parseDouble(dataset[i][colNum]);        //storing value of the attribute in colimn columnNum
+            
             if(!thresholdArray.contains(threshValue)){                  //determining if this value is in array of threshold values
                 thresholdArray.add(threshValue);                        //if it's not, add it
             }
             i++;  														//increment i
 		}
-		totalEntropy = getTotalEntropy();								//calculate entropy based on set of classes
+		entropy = calculateEntropy();								//calculate entropy based on set of classes
 		Map<Double, Double> thresholdEntropyMap = new HashMap<Double, Double>(thresholdArray.size());
 		
 		for(Double d: thresholdArray) {
-			gain = calculateGain(d, colNum);
+			gain = getInformationGain(d, colNum);
 			thresholdEntropyMap.put(d, gain);
 		}
 		
@@ -57,7 +59,7 @@ public class InformationGain {
 
 	}
 	
-	public double getTotalEntropy() {
+	public double calculateEntropy() {
 		int[] numOccurences = new int[classes.size()];                  //array storing number of occurences of each class
 		for(int i: numOccurences){                                      //initialising array
 	        numOccurences[i] = 0;
@@ -77,7 +79,7 @@ public class InformationGain {
         }
         return entropy;
 	}
-	public double calculateGain(Double threshold, int column){
+	public double getInformationGain(Double threshold, int column){
 
 		double greaterThanCount = 0;					//Total num of elements greater than the threshold
 		double lessThanCount = 0;					//Total num of elements less than or equal to the threshold
@@ -86,43 +88,38 @@ public class InformationGain {
 
 		
 		for(int i=0 ; i<numRows-1 ; i++){									//Sort the data into lists based on position about threshold
-			if (Double.parseDouble(dataset[i+1][column]) <= threshold){
-				lessThan.add(dataset[i+1]);
+			if (Double.parseDouble(dataset[i][column]) <= threshold){
+				lessThan.add(dataset[i]);
 			}
 			else{
-				greaterThan.add(dataset[i+1]);
+				greaterThan.add(dataset[i]);
 			}
 		}
-		float lessThanEntropy = 0;											
-		float greaterThanEntropy = 0;
+		double lessThanEntropy = 0;											
+		double greaterThanEntropy = 0;
 		
-		/**** Less than or equal to threshold calculations ****/
 		for(int i=0 ; i<classes.size() ; i++ ){						//looping over possible classes
 			String currentClass = classes.get(i);						//store class being used currently
-			int currenClassCount = 0;								//count number of occurrences 
+			int currenClassCount = 0;								//count number of occurrences of this class
 			
 			for(int j=0 ; j<lessThan.size(); j++){					//Loop over elements less than the threshold
 				String[] s = lessThan.get(j);
-				if (s[classIndex].equals(currentClass)){						//check if cases class equals current class being checked for
+				if (s[classIndex].equals(currentClass)){			//check if data's class equals current class being checked for
 					currenClassCount++;								//increment if a match is found
 				}
 			}
 			
-			double fraction;
-			double occurences = currenClassCount;
 			lessThanCount = lessThan.size();
-			if (occurences > 0){									//If there are occurrences of that class then calculate the entropy
-				fraction = occurences/lessThanCount;
-				lessThanEntropy += (-1) * fraction * (Math.log(fraction + Math.log(2)));
+			if ((currenClassCount/lessThanCount) > 0){									//If there are occurrences of that class then calculate the entropy
+				lessThanEntropy += (-1) * (currenClassCount/lessThanCount) * (Math.log(currenClassCount/lessThanCount) / Math.log(2));
 			}
-			else{													//If no occurrences - no effect on entropy
-				fraction = 0;
+			else{													//no occurences = no effect on entropy
 				lessThanEntropy -= 0;
 			}
 			
 		}
 		
-		for(int i=0 ; i<classes.size() ; i++ ){						//looping over possible classes
+		for(int i=0 ; i<classes.size() ; i++){						//looping over possible classes
 			String currentClass = classes.get(i);						//store class being used currently
 			int currentClassCount = 0;								//count number of occurrences
 			for(int j=0 ; j<greaterThan.size(); j++){				//Loop over elements greater than the threshold
@@ -131,29 +128,18 @@ public class InformationGain {
 					currentClassCount++;								//increment if a match is found
 				}
 			}
-			double fraction;
-			double occurences = currentClassCount;
 			greaterThanCount = greaterThan.size();
-			if(occurences > 0){										//If there are occurrences of that class then calculate the entropy
-				fraction = occurences/greaterThanCount;
-				greaterThanEntropy +=  (-1) * fraction * (Math.log(fraction + Math.log(2)));
+			if(currentClassCount/greaterThanCount > 0){							
+				greaterThanEntropy +=  (-1) * (currentClassCount/greaterThanCount) * (Math.log(currentClassCount/greaterThanCount)/ Math.log(2));
 			}
-			else{													//If no occurrences - no effect on entropy
-				fraction = 0;
+			else{													// no occurences = no effect on entropy
 				greaterThanEntropy -= 0;
 			}
 			 
 		}
-		//Calculate the entropy - provides a measure of how well the selected threshold divides the remaining data
-		double InfoGain = getInformationGain(lessThanEntropy, greaterThanEntropy, lessThanCount, greaterThanCount);
-	
-		return InfoGain;
-	
-	}
-	private double getInformationGain(float lowerThanEnt, float greaterThanEnt, double lowerThanTotal, double greaterThanTotal) {
 		int numSamples = (dataset.length - 1);
-		double gain = totalEntropy - ((lowerThanEnt*lowerThanTotal)/numSamples) - ((greaterThanEnt*greaterThanTotal)/numSamples); 
-		return gain;														   
-		
-	}
+		double infoGain = entropy - ((lessThanEntropy*lessThanCount)/numSamples) - ((greaterThanEntropy*greaterThanCount)/numSamples); 
+	
+		return infoGain;	
+	}														   
 }

@@ -13,7 +13,7 @@ public class Classifier {
 		datasetWClass = fr.convertTo2DArrayWithClasses();
 		System.out.print(Arrays.deepToString(dataset));
 		
-		InformationGain infogain = new InformationGain(fr.getNumCols() , fr.getNumRows(), datasetWClass); //information gain has no functionality yet
+		CreateNode infogain = new CreateNode(fr.getNumCols() , fr.getNumRows(), datasetWClass); //information gain has no functionality yet
 		
 		PrepareData prepData = new PrepareData(fr.getNumCols(), fr.getNumRows(), dataset);
 		dataset = prepData.orderByCol(0); //not fully working
