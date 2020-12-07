@@ -63,4 +63,23 @@ public class PrepareData {
 		}
 		return testSet;
 	}
+	
+	public String[][] splitNode(String[][] dataset, int threshold, int attributeIndex, boolean returnLeftSide){
+		String[][] leftSideDataset = new String[dataset.length][];
+		String[][] rightSideDataset = new String[dataset.length][];
+		
+		for(int i = 1; i < dataset.length-1; i++) {
+			if(Integer.parseInt(dataset[i][attributeIndex]) < threshold) {
+				leftSideDataset[i] = dataset[i];
+			}
+			else {
+				rightSideDataset[i] = dataset[i];
+			}
+		}
+		if (returnLeftSide) {
+			return leftSideDataset;
+		} else {
+			return rightSideDataset;
+		}		
+	}
 }
