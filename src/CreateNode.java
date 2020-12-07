@@ -13,7 +13,7 @@ public class CreateNode {
 		this.dataset = dataset;
 	}
 	
-	public TreeNode createNextNode(int colNum) { 					//creates next node based on calculations of entropy and gain of a specific attribute
+	public TreeNode createNextNode(String[][] dataset, int colNum) { 					//creates next node based on calculations of entropy and gain of a specific attribute
 		ArrayList<Double> thresholdArray = new ArrayList<Double>(); //arraylist to store all possible threshold values
 		String classType = "";
 		double threshValue;
