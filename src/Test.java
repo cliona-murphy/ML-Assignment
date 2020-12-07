@@ -5,61 +5,57 @@ public class Test {
 	public Test() {
 		
 	}
-	
-	public ArrayList<Result> testProgram(String[][] testData, TreeNode tree) {
-		int numAttributes = testData[0].length;
-		ArrayList<Result> results = new ArrayList<Result>();
-		ArrayList<String> attributes = new ArrayList<String>();
+	//accepts the testSet, the tree, and the array of classes
+	public ArrayList<Result> testProgram(String[][] testSet, TreeNode tree, ArrayList<String> classes) {
 		
-		for(int i = 0; i < numAttributes; i++) {
-			attributes.add(testData[0][i]);				//storing indexes in attributes arraylist
-		}
+		int numAttributes = testSet[0].length-1;					//storing the number of attributes in test set
+		ArrayList<Result> results = new ArrayList<Result>();		//creating ArrayList to store results of each piece of data in dataset
 		
-		for(int i = 1; i < testData.length; i++) {
+		for(int i = 1; i < testSet.length; i++) {					//skipping first row because this stores attributes indexes
 			
-			boolean classified = false; 
-			TreeNode current = tree;
-			String attribute;
-			double threshold;
-			int columnNum;
-			String prediction = "";
+			boolean classified = false; 							//boolean to determine whether data has been classified by algorithm or not
+			TreeNode current = tree;								//storing tree passed in in node current
+			String attribute;										//String to store attribute title
+			double threshold;										//double to store threshold
+			int columnNum;											//int to store column number
+			String prediction = "";									//String to store prediction of class
 			
-			while(!classified) {
-				attribute = current.getAttIdentifier();
-				threshold = current.getThreshold();
-				columnNum = Integer.parseInt(attribute);
+			while(!classified) {									//loop through while classified is false
+				attribute = current.getAttIdentifier();				//set attribute to be equal to the attribute identifier of the current node
+				threshold = current.getThreshold();					//set threshold to be equal to the threshold of the current node
+				columnNum = Integer.parseInt(attribute);			//set columnNum to be equal to the value of the attribute identifier
 				
-				if(threshold == -1) {
-					prediction = attribute;
-					classified = true;
+				if(threshold == -1) {								//checking if threshold is = -1
+					prediction = classes.get(Integer.parseInt(attribute));//if so, the prediction is set to the corresponding class in classes
+					classified = true;								//classified set to true
 				}
 				
-				if(Double.parseDouble(testData[i][columnNum]) <= threshold) {
-					if(current.getLeftChild() == null) {
-						prediction = current.getAttIdentifier(); //needs to match to a string stating the class
-						classified = true;
+				if(Double.parseDouble(testSet[i][columnNum]) <= threshold) { //if the value of the attribute is less than or equal threshold value
+					if(current.getLeftChild() == null) {					//check if the left child of the current node is null
+						prediction = classes.get(Integer.parseInt(attribute));	//if so, set prediction to be the class of the current node 
+						classified = true;									//classified set to true
 					} else {
-						current = current.getLeftChild();
+						current = current.getLeftChild();					//else the current node is set to the left child of the current node
 					}
 						
 				}else {
-					if(current.getRightChild() == null) {
-						prediction = current.getAttIdentifier();
-						classified = true;
+					if(current.getRightChild() == null) {				//if value of attribute is greater than threshold value
+						prediction = classes.get(Integer.parseInt(attribute));	//prediction is set to be the class of the current node
+						classified = true;								//classified is set to true
 					} else {
-						current = current.getRightChild();
+						current = current.getRightChild();				//else then current node becomes the right child of the current node
 					}
 				}
 			}
 			
-			String actualResult = testData[i][numAttributes];
-			boolean result = prediction == actualResult ? true : false;
+			String actualResult = testSet[i][0];			//storing the actual class of the piece of data 
+			boolean result = prediction == actualResult ? true : false; //determining if the predicted result is true or false based on this 
 			
-			Result testResult = new Result(result, prediction, actualResult);
-			results.add(testResult);
+			Result testResult = new Result(result, prediction, actualResult); //creating a result object with this data
+			results.add(testResult);						//adding this result to the arraylist of results
 		}
 		
-		return results;
+		return results;										//returning the results
 	}
 	
 }

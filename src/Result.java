@@ -9,8 +9,6 @@ public class Result {
 		predictedRes = predicted;
 		actualRes = actual;
 	}
-
-	//Getters and Setters
 	
 	public boolean isResult() {
 		return result;
@@ -20,19 +18,19 @@ public class Result {
 		this.result = result;
 	}
 
-	public String getPredicted() {
+	public String getPredictedResult() {
 		return predictedRes;
 	}
 
-	public void setPredicted(String predicted) {
+	public void setPredictedResult(String predicted) {
 		predictedRes = predicted;
 	}
 
-	public String getActual() {
+	public String getActualResult() {
 		return actualRes;
 	}
 
-	public void setActual(String actual) {
+	public void setActualResult(String actual) {
 		actualRes = actual;
 	}
 	

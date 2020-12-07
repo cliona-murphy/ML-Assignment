@@ -4,7 +4,7 @@ public class CreateNode {
 	
 	private int numRows;
 	private String[][] dataset = null;
-	private ArrayList<String> classes = new ArrayList<String>();
+	public ArrayList<String> classes = new ArrayList<String>();
 	private double entropy;
 	int classIndex = 3;
 	
