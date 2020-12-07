@@ -64,7 +64,9 @@ public class PrepareData {
 		return testSet;
 	}
 	
-	public String[][] splitNode(String[][] dataset, int threshold, int attributeIndex, boolean returnLeftSide){
+	// method which splits the dataset based on the node with the highest information gain and returns either the dataset which is less than the 
+	// threshold or the dataset greater than the threshold based on whether returnLeftSide is set to true or false
+	public String[][] splitNode(String[][] dataset, int threshold, int attributeIndex, boolean returnLeftSide){ 
 		String[][] leftSideDataset = new String[dataset.length][];
 		String[][] rightSideDataset = new String[dataset.length][];
 		
